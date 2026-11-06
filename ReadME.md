@@ -14,10 +14,10 @@ The modeling framework is based on the benchmark statistical challenge presented
 ---
 
 ## 2. Dataset & Exploratory Data Analysis
-The dataset contains 1986 performance metrics and 1987 compensation figures across 322 major league hitters. After excluding 59 records with missing compensation data, the final sample consists of **$n = 263$** hitters.
+The dataset contains 1986 performance metrics and 1987 compensation figures across 322 major league hitters. After excluding 59 records with missing compensation data, the final sample consists of **263 hitters**.
 
-* **Raw Salary Distribution:** Highly right-skewed with an extended upper tail ($\text{Mean} = \$542.2\text{k}$, $\text{Median} = \$430.0\text{k}$).
-* **Tukey Outlier Criterion:** Applying the $Q_3 + 1.5 \times \text{IQR}$ threshold ($\$1,585.5\text{k}$) identifies **11 extreme outliers** ($\approx 3.4\%$ of the sample).
+* **Raw Salary Distribution:** Highly right-skewed with an extended upper tail (Mean = $542.2k, Median = $430.0k).
+* **Tukey Outlier Criterion:** Applying the $Q_3 + 1.5 \times \text{IQR}$ threshold ($1,585.5k) identifies **11 extreme outliers** (~3.4% of the sample).
 * **Logarithmic Transformation:** Applying $\log(\text{Salary})$ stabilizes residual variance (homoscedasticity), compresses extreme upper-tail leverage, and reformulates the additive model into a multiplicative elasticity model.
 
 ---
@@ -25,7 +25,8 @@ The dataset contains 1986 performance metrics and 1987 compensation figures acro
 ## 3. Econometric Modeling
 
 To avoid biasing cumulative statistics toward older players, we construct an average annual performance metric:
-$$\text{Hits\_per\_year} = \frac{\text{Career Hits}}{\text{Longevity (Years)}}$$
+
+$$\text{Hits\_per\_year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
 
 ### Summary of Specifications
 
@@ -48,16 +49,12 @@ $$\text{Hits\_per\_year} = \frac{\text{Career Hits}}{\text{Longevity (Years)}}$$
 ## 4. Diagnostics & Limitations
 
 ### Residual Normality
-The Shapiro-Wilk test yields $W = 0.9878$ ($p = 0.0248$). Although the null hypothesis is rejected at $\alpha = 0.05$ due to sample sensitivity at $n = 263$, the test statistic is close to 1, indicating minor practical deviations.
-
-![Normal Q-Q Plot](./figures/qq_plot_m4.png)
+The Shapiro-Wilk test yields $W = 0.9878$ ($p = 0.0248$). Although the null hypothesis of normality is rejected at $\alpha = 0.05$ due to sensitivity at $n = 263$, the test statistic is close to 1, indicating minor practical deviations.
 
 ### Non-Linearity in Longevity
 Residual analysis reveals curvature in univariate experience models, demonstrating that player earning power flattens and declines in later veteran years rather than following a purely linear path.
 
-![Residuals vs Fitted](./figures/residuals_vs_fitted_m4.png)
-
-### Unexplained Variance ($37.9\%$)
+### Unexplained Variance (37.9%)
 Omitted structural variables—including defensive fielding position, franchise payroll constraints, and free-agency arbitration eligibility—account for the remaining dispersion.
 
 ---

@@ -51,8 +51,12 @@ $$\text{Hits per year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
 ### Residual Normality
 The Shapiro-Wilk test yields $W = 0.9878$ ($p = 0.0248$). Although the null hypothesis of normality is rejected at $\alpha = 0.05$ due to sensitivity at $n = 263$, the test statistic is close to 1, indicating minor practical deviations.
 
+![Normal Q-Q Plot](./figures/qq_plot_m4.png)
+
 ### Non-Linearity in Longevity
 Residual analysis reveals curvature in univariate experience models, demonstrating that player earning power flattens and declines in later veteran years rather than following a purely linear path.
+
+![Residuals vs Fitted](./figures/residuals_vs_fitted_m4.png)
 
 ### Unexplained Variance (37.9%)
 Omitted structural variables—including defensive fielding position, franchise payroll constraints, and free-agency arbitration eligibility—account for the remaining dispersion.

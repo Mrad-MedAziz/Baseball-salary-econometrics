@@ -26,7 +26,7 @@ The dataset contains 1986 performance metrics and 1987 compensation figures acro
 
 To avoid biasing cumulative statistics toward older players, we construct an average annual performance metric:
 
-$$\text{Hits\_per\_year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
+$$\text{Hits per year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
 
 ### Summary of Specifications
 

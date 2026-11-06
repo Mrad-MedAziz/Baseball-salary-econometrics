@@ -68,4 +68,4 @@ Omitted structural variables—including defensive fielding position, franchise 
 To reproduce all model calculations and output plots, run:
 
 ```bash
-Rscript analysis.R
+Rscript Analysis.R

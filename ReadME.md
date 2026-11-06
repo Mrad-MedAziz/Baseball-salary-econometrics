@@ -16,9 +16,9 @@ The modeling framework is based on the benchmark statistical challenge presented
 ## 2. Dataset & Exploratory Data Analysis
 The dataset contains 1986 performance metrics and 1987 compensation figures across 322 major league hitters. After excluding 59 records with missing compensation data, the final sample consists of **263 hitters**.
 
-* **Raw Salary Distribution:** Highly right-skewed with an extended upper tail (Mean = $542.2k, Median = $430.0k).
-* **Tukey Outlier Criterion:** Applying the $Q_3 + 1.5 \times \text{IQR}$ threshold ($1,585.5k) identifies **11 extreme outliers** (~3.4% of the sample).
-* **Logarithmic Transformation:** Applying $\log(\text{Salary})$ stabilizes residual variance (homoscedasticity), compresses extreme upper-tail leverage, and reformulates the additive model into a multiplicative elasticity model.
+* **Raw Salary Distribution:** Highly right-skewed with an extended upper tail (Mean = 542.2k USD, Median = 430.0k USD).
+* **Tukey Outlier Criterion:** Applying the Q3 + 1.5 × IQR threshold (1,585.5k USD) identifies **11 extreme outliers** (~3.4% of the sample).
+* **Logarithmic Transformation:** Applying log(Salary) stabilizes residual variance (homoscedasticity), compresses extreme upper-tail leverage, and reformulates the additive model into a multiplicative elasticity model.
 
 ---
 
@@ -30,19 +30,19 @@ $$\text{Hits\_per\_year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
 
 ### Summary of Specifications
 
-| Model | Specification | $R^2$ | Adjusted $R^2$ | Residual Std. Error |
+| Model | Specification | R² | Adjusted R² | Residual Std. Error |
 | :--- | :--- | :---: | :---: | :---: |
-| **M1** | $\log(\text{Salary}) = 5.173 + 0.1047 \cdot \text{Longevity}$ | 0.322 | 0.319 | 0.720 |
-| **M2** | $\log(\text{Salary}) = 4.821 + 0.0103 \cdot \text{Hits\_86}$ | 0.263 | 0.260 | 0.751 |
-| **M3** | $\log(\text{Salary}) = 4.572 + 0.0151 \cdot \text{Hits\_per\_year}$ | 0.430 | 0.428 | 0.660 |
-| **M4** | $\log(\text{Salary}) = 3.993 + 0.0875 \cdot \text{Longevity} + 0.0065 \cdot \text{Hits\_per\_year} + 0.0066 \cdot \text{Hits\_86}$ | **0.621** | **0.617** | **0.540** |
+| **M1** | log(Salary) = 5.173 + 0.1047 · Longevity | 0.322 | 0.319 | 0.720 |
+| **M2** | log(Salary) = 4.821 + 0.0103 · Hits_86 | 0.263 | 0.260 | 0.751 |
+| **M3** | log(Salary) = 4.572 + 0.0151 · Hits_per_year | 0.430 | 0.428 | 0.660 |
+| **M4** | log(Salary) = 3.993 + 0.0875 · Longevity + 0.0065 · Hits_per_year + 0.0066 · Hits_86 | **0.621** | **0.617** | **0.540** |
 
-*All predictors in Model M4 are statistically significant at $p < 0.001$.*
+*All predictors in Model M4 are statistically significant at p &lt; 0.001.*
 
 ### Coefficient Interpretation (Model M4)
-* **$\text{Longevity}$ ($\beta = 0.0875$):** Each additional year of service corresponds to an expected $+9.1\%$ increase in annual compensation ($e^{0.0875} - 1$), holding other variables constant.
-* **$\text{Hits\_per\_year}$ ($\beta = 0.0065$):** An increase of one base hit per season throughout a career corresponds to a $+0.65\%$ salary increase.
-* **$\text{Hits\_86}$ ($\beta = 0.0066$):** Each additional base hit in the immediate preceding season yields an expected $+0.66\%$ increase in salary.
+* **Longevity** ($\beta = 0.0875$): Each additional year of service corresponds to an expected +9.1% increase in annual compensation ($e^{0.0875} - 1$), holding other variables constant.
+* **Hits_per_year** ($\beta = 0.0065$): An increase of one base hit per season throughout a career corresponds to a +0.65% salary increase.
+* **Hits_86** ($\beta = 0.0066$): Each additional base hit in the immediate preceding season yields an expected +0.66% increase in salary.
 
 ---
 

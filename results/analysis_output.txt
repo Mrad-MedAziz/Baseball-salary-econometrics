@@ -1,0 +1,166 @@
+Raw dataset: 322 rows, 20 variables
+Qualitative variables: 3 
+Rows dropped (missing Salary): 59 -> final sample n = 263 
+
+=====================================================
+            UNIVARIATE SALARY METRICS
+=====================================================
+Sample size (n):        263
+Mean salary:            535.9 k$
+Median salary:          425.0 k$
+Q1 (25%):               190.0 k$
+Q3 (75%):               750.0 k$
+IQR:                    560.0 k$
+Tukey upper threshold:  1590.0 k$
+Outliers:               11 (4.2% of sample)
+Mean log(Salary):       5.93
+Median log(Salary):     6.05
+
+=====================================================
+                  MODEL ESTIMATION
+=====================================================
+
+--- Model M1 ---
+
+Call:
+lm(formula = log_Salary ~ Longevity, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.89366 -0.55341 -0.07615  0.54539  2.26488 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 5.198384   0.084612   61.44   <2e-16 ***
+Longevity   0.099680   0.009683   10.29   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7513 on 261 degrees of freedom
+Multiple R-squared:  0.2888,	Adjusted R-squared:  0.286 
+F-statistic:   106 on 1 and 261 DF,  p-value: < 2.2e-16
+
+
+--- Model M2 ---
+
+Call:
+lm(formula = log_Salary ~ Hits_86, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.3325 -0.7185  0.1471  0.5510  2.6818 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 4.971962   0.127315  39.053  < 2e-16 ***
+Hits_86     0.008859   0.001089   8.131 1.72e-14 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7958 on 261 degrees of freedom
+Multiple R-squared:  0.2021,	Adjusted R-squared:  0.1991 
+F-statistic: 66.12 on 1 and 261 DF,  p-value: 1.724e-14
+
+
+--- Model M3 ---
+
+Call:
+lm(formula = log_Salary ~ Hits_per_year, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1751 -0.4883  0.1490  0.4845  2.8881 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   4.713756   0.110663   42.60   <2e-16 ***
+Hits_per_year 0.013494   0.001128   11.96   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7161 on 261 degrees of freedom
+Multiple R-squared:  0.354,	Adjusted R-squared:  0.3515 
+F-statistic:   143 on 1 and 261 DF,  p-value: < 2.2e-16
+
+
+--- Model M4 ---
+
+Call:
+lm(formula = log_Salary ~ Longevity + Hits_per_year + Hits_86, 
+    data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1779 -0.4459  0.0300  0.4229  3.2320 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   4.234854   0.115616  36.628  < 2e-16 ***
+Longevity     0.081821   0.009046   9.045  < 2e-16 ***
+Hits_per_year 0.006004   0.001512   3.970 9.30e-05 ***
+Hits_86       0.005140   0.001233   4.168 4.19e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.6249 on 259 degrees of freedom
+Multiple R-squared:  0.5118,	Adjusted R-squared:  0.5061 
+F-statistic:  90.5 on 3 and 259 DF,  p-value: < 2.2e-16
+
+
+--- Table 1: Model comparison ---
+ Model    Predictors    R2 Adj_R2 Residual_SE
+    M1     Longevity 0.289  0.286       0.751
+    M2       Hits_86 0.202  0.199       0.796
+    M3 Hits_per_year 0.354  0.351       0.716
+    M4      Combined 0.512  0.506       0.625
+
+--- Model M4 coefficients (95% CI) ---
+          Term Estimate  CI_low CI_high p_value Pct_change
+   (Intercept)  4.23485 4.00719 4.46252   0e+00         NA
+     Longevity  0.08182 0.06401 0.09963   0e+00    8.52615
+ Hits_per_year  0.00600 0.00303 0.00898   9e-05    0.60216
+       Hits_86  0.00514 0.00271 0.00757   4e-05    0.51531
+
+=====================================================
+               RESIDUAL DIAGNOSTICS
+=====================================================
+M1  Shapiro-Wilk W = 0.9897, p = 0.05792
+M2  Shapiro-Wilk W = 0.9668, p = 8.91e-06
+M3  Shapiro-Wilk W = 0.9687, p = 1.65e-05
+M4  Shapiro-Wilk W = 0.9624, p = 2.305e-06
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+
+=====================================================
+                  OUTPUT FILES
+=====================================================
+ [1] "fig1_salary_histogram.png"           
+ [2] "fig2_salary_boxplot.png"             
+ [3] "fig3_raw_vs_log_salary.png"          
+ [4] "fig4_simple_regressions.png"         
+ [5] "fig5_m4_coefficients.png"            
+ [6] "fig6_m4_predicted_vs_actual.png"     
+ [7] "fig7_qq_plots_4models.png"           
+ [8] "fig8_residuals_vs_fitted_4models.png"
+ [9] "qq_plot_m4.png"                      
+[10] "residuals_vs_fitted_m4.png"          
+[1] "analysis_output.txt"         "m4_coefficients.csv"        
+[3] "table1_model_comparison.csv"

@@ -1,0 +1,5 @@
+"Model","Predictors","R2","Adj_R2","Residual_SE"
+"M1","Longevity",0.289,0.286,0.751
+"M2","Hits_86",0.202,0.199,0.796
+"M3","Hits_per_year",0.354,0.351,0.716
+"M4","Combined",0.512,0.506,0.625

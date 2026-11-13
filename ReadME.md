@@ -2,7 +2,7 @@
 
 **Authors:** Anh Minh Ho, Bruno Meler, Mohamed Aziz Mrad  
 **Institution:** Sorbonne Université — Atelier de Recherche Encadrée (Grade: 95/100)  
-**Full Report:** [Download Report PDF in french](./report.pdf)
+**Full Report:** [Download Report PDF in french](./report.pdf) ||
                 [Download Report PDF in English](./English_Version_of_Report.pdf)
 
 ---

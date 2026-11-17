@@ -1,0 +1,2 @@
+# Preserve the supplied course CSV byte-for-byte, including CRLF line endings.
+data/Baseball.csv -text whitespace=cr-at-eol

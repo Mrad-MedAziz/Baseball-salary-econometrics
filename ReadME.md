@@ -1,91 +1,72 @@
 # Econometric Analysis of Major League Baseball Salaries (1986–1987)
 
-**Authors:** Anh Minh Ho, Bruno Meler, Mohamed Aziz Mrad  
-**Institution:** Sorbonne Université — Atelier de Recherche Encadrée (Grade: 95/100)  
-**Full Report:** [Download Report PDF in french](./report.pdf) ||
-                [Download Report PDF in English](./English_Version_of_Report.pdf)
+**Authors:** Anh Minh Ho, Bruno Meler, Mohamed Aziz Mrad
 
----
+**Course:** Sorbonne Université, supervised research workshop — grade 95/100
 
-## 1. Research Overview
-This empirical study evaluates the determinants of compensation in Major League Baseball (MLB). We examine whether professional player salaries reflect single-season productivity, cumulative historical output, or league experience.
+**Reports:** [Original French report, 11 pages](report.pdf) · [English version, 10 pages](English_Version_of_Report.pdf)
 
-The modeling framework is based on the benchmark statistical challenge presented by **Hoaglin & Velleman (1995)** (*"A Critical Look at Some Analyses of Major League Baseball Salaries"*).
+A three-person course project examining the association between baseball performance, career duration, and salary. We adapted general R code supplied by our instructor to the project and presented the work as it progressed. Tasks rotated within the team; Mohamed Aziz contributed particularly to mathematical interpretation and suggestions for addressing modelling problems.
 
----
+## Reproduce the analysis
 
-## 2. Dataset & Exploratory Data Analysis
-The dataset contains 1986 performance metrics and 1987 compensation figures across 322 major league hitters. After excluding 59 records with missing compensation data, the final sample consists of **263 hitters**.
-
-* **Raw Salary Distribution:** Highly right-skewed with an extended upper tail (Mean = 542.2k USD, Median = 430.0k USD).
-
-![Figure 1: Histogram of 1987 Salaries](./figures/fig1_salary_histogram.png)
-
-* **Tukey Outlier Criterion:** Segmenting by quartiles ($Q_1 = 193.0\text{k USD}$, $Q_3 = 750.0\text{k USD}$) and applying the $Q_3 + 1.5 \times \text{IQR}$ threshold (1,585.5k USD) identifies **11 extreme outliers** (~3.4% of the initial dataset, or 4.2% of the 263 complete cases).
-
-![Figure 2: Boxplot of 1987 Salaries](./figures/fig2_salary_boxplot.png)
-
-* **Logarithmic Transformation:** Applying `log(Salary)` symmetrizes the distribution, stabilizes residual variance (homoscedasticity), compresses extreme upper-tail leverage, and reformulates the additive specification into a multiplicative elasticity model.
-
-![Figure 3: Raw vs. Log-Transformed Salary Distributions](./figures/fig3_raw_vs_log_salary.png)
-
----
-
-## 3. Econometric Modeling
-
-To avoid biasing cumulative statistics toward older players, we construct an average annual performance metric:
-
-$$\text{Hits per year} = \frac{\text{Career Hits}}{\text{Longevity}}$$
-
-### Simple Regressions (M1, M2, M3)
-Evaluating each predictor individually confirms statistically significant positive associations across all three dimensions:
-
-![Figure 4: Simple Regressions](./figures/fig4_simple_regressions.png)
-
-### Summary of Specifications
-
-| Model | Specification | R² | Adjusted R² | Residual Std. Error |
-| :--- | :--- | :---: | :---: | :---: |
-| **M1** | log(Salary) = 5.173 + 0.1047 · Longevity | 0.322 | 0.319 | 0.720 |
-| **M2** | log(Salary) = 4.821 + 0.0103 · Hits_86 | 0.263 | 0.260 | 0.751 |
-| **M3** | log(Salary) = 4.572 + 0.0151 · Hits_per_year | 0.430 | 0.428 | 0.660 |
-| **M4** | log(Salary) = 3.993 + 0.0875 · Longevity + 0.0065 · Hits_per_year + 0.0066 · Hits_86 | **0.621** | **0.617** | **0.540** |
-
-*All predictors in Model M4 are statistically significant at p &lt; 0.001.*
-
-### Coefficient Interpretation & Goodness of Fit (Model M4)
-* **Longevity** ($\beta = 0.0875$): Each additional year of service corresponds to an expected +9.1% increase in annual compensation ($e^{0.0875} - 1$), holding other variables constant.
-* **Hits_per_year** ($\beta = 0.0065$): An increase of one base hit per season throughout a career corresponds to a +0.65% salary increase.
-* **Hits_86** ($\beta = 0.0066$): Each additional base hit in the immediate preceding season yields an expected +0.66% increase in salary.
-
-![Figure 5: Model M4 Coefficients with 95% Confidence Intervals](./figures/fig5_m4_coefficients.png)
-
-Model M4 explains **62.1%** of the variance in `log(Salary)`, with predicted values clustering tightly around the $y = x$ reference line:
-
-![Figure 6: Model M4 Predicted vs. Actual Values](./figures/fig6_m4_predicted_vs_actual.png)
-
----
-
-## 4. Diagnostics & Limitations
-
-### Residual Normality
-The Shapiro-Wilk test on Model M4 yields $W = 0.9878$ ($p = 0.0248$). Although the null hypothesis of exact normality is rejected at $\alpha = 0.05$ due to sample sensitivity at $n = 263$, $W$ is remarkably close to 1, confirming that tail deviations are minor in practice.
-
-![Figure 7: Q-Q Plots of Residuals Across All 4 Models](./figures/fig7_qq_plots_4models.png)
-
-### Homoscedasticity & Non-Linearity in Longevity
-Residual vs. fitted value diagnostics reveal a pronounced arch shape in M1 (`~Longevity`), demonstrating that player earning power flattens and declines in veteran years rather than increasing linearly forever. Combining all three predictors in M4 substantially flattens the residual trend line around zero.
-
-![Figure 8: Residuals vs. Fitted Values Across All 4 Models](./figures/fig8_residuals_vs_fitted_4models.png)
-
-### Unexplained Variance (37.9%)
-Omitted structural variables—including defensive fielding position, franchise payroll constraints, and free-agency arbitration eligibility—account for the remaining dispersion.
-
----
-
-## 5. Reproduction
-
-To reproduce all model calculations and generate all 8 figures in `./figures/`, run:
+Requires R and its standard packages; no additional package installation is needed.
 
 ```bash
-Rscript analysis.R
+git clone https://github.com/Mrad-MedAziz/Baseball-salary-econometrics.git
+cd Baseball-salary-econometrics
+Rscript Analysis.r
+Rscript tests/check_results.R
+```
+
+The script uses the committed [`data/Baseball.csv`](data/Baseball.csv), the course file used for the graded report. It writes figures to `figures/` and tables and console output to `results/`. See [data provenance and checksum](data/README.md).
+
+**Data-version correction:** an earlier version of the reproduction script loaded `ISLR::Hitters`. That dataset does not reproduce this report. The script now uses the supplied course CSV explicitly. The original reports remain unchanged; current CSV outputs are authoritative for reproduced numerical values.
+
+## Data and method
+
+The source file contains 322 players and 24 columns, with 1986 performance statistics and 1987 salaries in thousands of US dollars. Removing rows with missing values leaves 263 hitters. The modelling approach follows [Hoaglin and Velleman (1995)](https://doi.org/10.1080/00031305.1995.10476165).
+
+We fit three simple regressions and a combined ordinary least squares model for `log(Salary_1987)`. Career hits per year is computed as `Hits_career / Longevity`; this converts a career total into an annual average, without claiming independence from career duration.
+
+| Model | Predictors | R² | Adjusted R² | Residual standard error |
+| --- | --- | ---: | ---: | ---: |
+| M1 | Career duration | 0.322 | 0.319 | 0.729 |
+| M2 | Hits in 1986 | 0.263 | 0.260 | 0.760 |
+| M3 | Career hits per year | 0.430 | 0.428 | 0.669 |
+| M4 | All three predictors | 0.621 | 0.617 | 0.547 |
+
+The combined model is approximately:
+
+```text
+log(Salary_1987) = 3.993 + 0.08752 * Longevity
+                        + 0.006467 * Hits_per_year
+                        + 0.006567 * Hits_86
+```
+
+It explains 62.1% of the **in-sample variance in log-salary**, not raw salary or held-out prediction performance. All three slope coefficients have p < 0.001 under the fitted model. Coefficients describe conditional associations, not causal effects. Their magnitudes cannot be compared directly as measures of importance because the predictors have different units.
+
+## Diagnostics and limitations
+
+Residual plots suggest nonlinearity in the simple career-duration model. Combining predictors reduces some visible structure but does not establish that all model assumptions hold. A logarithmic response compresses salary differences; it does not automatically guarantee constant error variance or normal residuals.
+
+For M4, the Shapiro–Wilk test gives W = 0.9878 and p = 0.02479. This rejects exact normality at the 5% level. The statistic alone does not establish that departures are practically negligible. Normality is distinct from the Gauss–Markov assumptions.
+
+The analysis is observational, excludes players with missing salaries, and does not evaluate held-out predictive accuracy. Possible omitted factors include contract status, defensive position, and team context; this study does not identify how much unexplained variance each factor accounts for. A nonlinear career-duration term remains a possible extension.
+
+The archived reports contain broader interpretations than these checks support. In particular, their statements about guaranteed variance stabilization, negligible nonnormality, elasticity, and predictor dominance should be read with the qualifications above. The source CSV has 24 columns, rather than 28 raw variables.
+
+## Figures and outputs
+
+| Figure | Output |
+| --- | --- |
+| Salary distribution | [Histogram](figures/fig1_salary_histogram.png) |
+| Salary outliers | [Boxplot](figures/fig2_salary_boxplot.png) |
+| Raw and log-salary | [Histograms](figures/fig3_raw_vs_log_salary.png) |
+| Simple regressions | [M1–M3](figures/fig4_simple_regressions.png) |
+| Combined-model coefficients | [95% confidence intervals](figures/fig5_m4_coefficients.png) |
+| In-sample fitted values | [Predicted versus actual](figures/fig6_m4_predicted_vs_actual.png) |
+| Residual normality | [Q–Q plots](figures/fig7_qq_plots_4models.png) |
+| Residual structure | [Residuals versus fitted](figures/fig8_residuals_vs_fitted_4models.png) |
+
+Full results: [model comparison](results/table1_model_comparison.csv), [coefficients](results/m4_coefficients.csv), and [analysis log](results/analysis_output.txt).

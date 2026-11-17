@@ -18,6 +18,12 @@
 #   Full console output                            results/analysis_output.txt
 # ==============================================================================
 
+# Resolve paths from this script, so invocation from another directory works.
+script_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+if (length(script_arg)) {
+  setwd(dirname(normalizePath(sub("^--file=", "", script_arg[1]))))
+}
+
 dir.create("figures", showWarnings = FALSE)
 dir.create("results", showWarnings = FALSE)
 sink("results/analysis_output.txt", split = TRUE)
@@ -25,18 +31,14 @@ sink("results/analysis_output.txt", split = TRUE)
 # ------------------------------------------------------------------------------
 # 1. Data loading and cleaning
 # ------------------------------------------------------------------------------
-load_hitters <- function() {
-  if (requireNamespace("ISLR", quietly = TRUE)) {
-    return(ISLR::Hitters)
-  }
-  if (file.exists("Hitters.csv")) {
-    return(read.csv("Hitters.csv"))
-  }
-  install.packages("ISLR", repos = "https://cloud.r-project.org")
-  return(ISLR::Hitters)
+# Use the exact course dataset used for the graded report. ISLR::Hitters is
+# a different version and does not reproduce the reported results.
+raw <- read.csv2("data/Baseball.csv", dec = ".", stringsAsFactors = FALSE,
+                 na.strings = c("NA", ""))
+required <- c("Salary_1987", "Hits_86", "Longevity", "Hits_career")
+if (!all(required %in% names(raw))) {
+  stop("Dataset is missing required salary/performance columns")
 }
-
-raw <- load_hitters()
 cat("Raw dataset:", nrow(raw), "rows,", ncol(raw), "variables\n")
 n_qual <- sum(sapply(raw, function(x) is.factor(x) || is.character(x)))
 cat("Qualitative variables:", n_qual, "\n")
@@ -45,11 +47,11 @@ df <- na.omit(raw)
 cat("Rows dropped (missing Salary):", nrow(raw) - nrow(df),
     "-> final sample n =", nrow(df), "\n\n")
 
-df$Salary_1987   <- df$Salary                 # thousands of dollars
+if (any(df$Salary_1987 <= 0) || any(df$Longevity <= 0)) {
+  stop("Salaries and career duration must be positive")
+}
 df$log_Salary    <- log(df$Salary_1987)
-df$Hits_86       <- df$Hits
-df$Longevity     <- df$Years
-df$Hits_per_year <- df$CHits / df$Years       # career hits per year of career
+df$Hits_per_year <- df$Hits_career / df$Longevity       # career hits per year of career
 
 sal <- df$Salary_1987
 
@@ -119,9 +121,10 @@ m4_coefs <- data.frame(
   row.names  = NULL
 )
 m4_coefs$Pct_change[m4_coefs$Term == "(Intercept)"] <- NA
-m4_coefs[, 2:6] <- round(m4_coefs[, 2:6], 5)
+# Preserve small p-values and full precision in the saved CSV.
+# Formatting for display must not turn significant p-values into literal zeros.
 cat("\n--- Model M4 coefficients (95% CI) ---\n")
-print(m4_coefs, row.names = FALSE)
+print(m4_coefs, row.names = FALSE, digits = 5)
 write.csv(m4_coefs, "results/m4_coefficients.csv", row.names = FALSE)
 
 # ------------------------------------------------------------------------------
@@ -329,3 +332,7 @@ print(list.files("figures", pattern = "\\.png$"))
 print(list.files("results"))
 
 sink()
+
+# Keep the saved console log stable and free of trailing display whitespace.
+log_lines <- readLines("results/analysis_output.txt", warn = FALSE)
+writeLines(sub("[[:blank:]]+$", "", log_lines), "results/analysis_output.txt")
